@@ -1,5 +1,6 @@
 package com.flipzon.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long pk;
+	// @Column(name = "customer_name")
 	private String name;
 	private String email;
 	private String mobile;
