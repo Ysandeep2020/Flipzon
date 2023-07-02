@@ -1,7 +1,6 @@
 package com.flipzon.model;
 
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,27 +13,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
 @Entity
-//@Table(name = "customer_detatils")
-public class Customer {
+
+public class Comment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long pk;
-	// @Column(name = "customer_name")
-	private String name;
-	private String email;
-	private String mobile;
-	private String address;
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-	private List<Product> products;
+	private String comment;
+	private int rating;
+    @JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(columnDefinition = "product_pk")
+	private Product product;
 
-	@JsonIgnore
+    @JsonIgnore
 	@CreationTimestamp
 	@Column(name = "created_at")
 	private Date createdAt;

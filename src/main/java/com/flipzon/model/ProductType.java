@@ -8,32 +8,35 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-//@Table(name = "customer_detatils")
-public class Customer {
+@Table(name = "product_type")
+public class ProductType {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long pk;
-	// @Column(name = "customer_name")
 	private String name;
-	private String email;
-	private String mobile;
-	private String address;
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+	@OneToMany(mappedBy = "productType")
 	private List<Product> products;
-
 	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "created_at")
