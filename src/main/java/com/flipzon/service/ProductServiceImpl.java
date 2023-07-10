@@ -1,13 +1,13 @@
 package com.flipzon.service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
@@ -52,8 +52,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getAllProducts() {
-		return productRepository.findAll();
+	public Map<String , Object> getAllProducts(int page, String prop, String order) {
+		 Map<String , Object> map=new HashMap<>();
+		// List<Product> findAll = productRepository.findAll();
+		PageRequest pageable = null;
+		if (order.contains("desc"))
+			pageable = PageRequest.of(page - 1, 2, Sort.by(Order.desc(prop)));
+	//	pageable = PageRequest.of(page - 1, 2, Sort.by(Order.));
+		   
+		else
+			pageable = PageRequest.of(page - 1, 2, Sort.by(Order.asc(prop)));
+
+		Page<Product> all = productRepository.findAll(pageable);
+		  map.put("content", all.getContent());
+		  map.put("totalPages", all.getTotalPages());
+		return map;
 	}
 
 	@Override

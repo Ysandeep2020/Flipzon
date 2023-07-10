@@ -1,6 +1,7 @@
 package com.flipzon.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
@@ -12,7 +13,7 @@ public interface ProductService {
 
 	Product addProduct(ProductRequest product);
 
-	List<Product> getAllProducts();
+	Map<String, Object> getAllProducts(int page,String prop, String order);
 
 	Product findByPk(long pk);
 

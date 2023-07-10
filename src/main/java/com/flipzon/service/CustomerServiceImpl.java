@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository customerRepository;
 	@Autowired
 	private ProductRepository productRepository;
+	Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	@Override
 	public String addCustomer(CustomerRequest customerRequest) {

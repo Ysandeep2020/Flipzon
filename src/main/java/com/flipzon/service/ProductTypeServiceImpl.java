@@ -2,29 +2,40 @@ package com.flipzon.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.flipzon.advice.ProductNofFoundException;
 import com.flipzon.advice.ProductTypeNofFoundException;
 import com.flipzon.dto.ProductTypeRequest;
-import com.flipzon.model.Product;
 import com.flipzon.model.ProductType;
 import com.flipzon.repository.ProductTypeRepository;
 
 import io.micrometer.common.util.StringUtils;
 
+//@Slf4j
 @Service
 public class ProductTypeServiceImpl implements ProductTypeService {
 	@Autowired
 	private ProductTypeRepository productTypeRepository;
 
+	Logger log = LoggerFactory.getLogger(ProductTypeServiceImpl.class);
+	//@Slf4j
 	@Override
 	public ProductType addProductType(ProductTypeRequest productTypeRequest) {
+		log.info("Request  again {}", productTypeRequest);
+		// seriveImp.method();
 		ProductType productType = new ProductType();
 		BeanUtils.copyProperties(productTypeRequest, productType);
-		return productTypeRepository.save(productType);
+		ProductType save = productTypeRepository.save(productType);
+
+		// System.out.println(1/0);
+		// log.debug("");
+		log.warn(" please take correct product Type");
+		log.info("Response again {}", save.getPk());
+		return save;
 	}
 
 	@Override

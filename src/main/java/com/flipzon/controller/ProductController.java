@@ -1,9 +1,9 @@
 package com.flipzon.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +30,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(UrlMappings.PRODUCTS)
 public class ProductController {
-
 	@Autowired
 	private ProductService productService;
 	@Autowired
@@ -46,10 +45,11 @@ public class ProductController {
 		return new ResponseEntity<Product>(productOut, HttpStatus.CREATED); // 201 created
 	}
 
-	@GetMapping
-	public ResponseEntity<Object> getAllProducts() {
-		List<Product> content = productService.getAllProducts();
-		return new ResponseEntity<Object>(content, HttpStatus.OK);// 200 OK
+	@GetMapping("/page/{page}/sortBy/{prop}")
+	public ResponseEntity<Object> getAllProducts(@PathVariable int page, @PathVariable String prop,
+			@RequestParam(defaultValue = "asc") String order) {
+		Map<String, Object> map = productService.getAllProducts(page, prop, order);
+		return new ResponseEntity<Object>(map, HttpStatus.OK);// 200 OK
 	}
 
 	@GetMapping(UrlMappings.PK)
@@ -82,4 +82,5 @@ public class ProductController {
 		return new ResponseEntity<Object>(all, HttpStatus.OK);
 	}
 
+	
 }
