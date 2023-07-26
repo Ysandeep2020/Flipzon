@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByPk(long pk);
 
 	List<Product> findAllByCustomerEmail(String email);
+
+	List<Product> findAllByCustomer(Customer customer);
 }

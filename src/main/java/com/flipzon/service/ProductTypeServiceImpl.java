@@ -25,15 +25,17 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 	//@Slf4j
 	@Override
 	public ProductType addProductType(ProductTypeRequest productTypeRequest) {
-		log.info("Request  again {}", productTypeRequest);
+		log.info("ProductTypeServiceImpl Request {}", productTypeRequest);
 		// seriveImp.method();
+		System.out.println(1/0);
+
 		ProductType productType = new ProductType();
 		BeanUtils.copyProperties(productTypeRequest, productType);
 		ProductType save = productTypeRepository.save(productType);
 
 		// System.out.println(1/0);
 		// log.debug("");
-		log.warn(" please take correct product Type");
+		//log.warn(" please take correct product Type");
 		log.info("Response again {}", save.getPk());
 		return save;
 	}

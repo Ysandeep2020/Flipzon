@@ -1,6 +1,8 @@
 package com.flipzon.service;
 
+import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,30 +45,43 @@ public class ProductServiceImpl implements ProductService {
 		ProductType productType = productTypeRepository.findByPk(productTypePk)
 				.orElseThrow(() -> new ProductTypeNofFoundException("ProductType not found with pk " + productTypePk));
 		product.setProductType(productType);
+		
 		Long customerPk = productRequest.getCustomerPk();
 		Customer customer = customerRepository.findByPk(customerPk)
 				.orElseThrow(() -> new CustomerNotFoundException("Customer Not found with pk " + customerPk));
 		product.setCustomer(customer);
+		
 		BeanUtils.copyProperties(productRequest, product);
 		return productRepository.save(product);
 	}
 
 	@Override
-	public Map<String , Object> getAllProducts(int page, String prop, String order) {
-		 Map<String , Object> map=new HashMap<>();
+	public Map<String, Object> getAllProducts(int page, String prop, String order, Principal principal) {
+		Map<String, Object> map = new HashMap<>();
+		String username = principal.getName();
+
+		Customer customer = customerRepository.findByName(username);
 		// List<Product> findAll = productRepository.findAll();
 		PageRequest pageable = null;
 		if (order.contains("desc"))
 			pageable = PageRequest.of(page - 1, 2, Sort.by(Order.desc(prop)));
-	//	pageable = PageRequest.of(page - 1, 2, Sort.by(Order.));
-		   
+		// pageable = PageRequest.of(page - 1, 2, Sort.by(Order.));
+
 		else
 			pageable = PageRequest.of(page - 1, 2, Sort.by(Order.asc(prop)));
 
 		Page<Product> all = productRepository.findAll(pageable);
-		  map.put("content", all.getContent());
-		  map.put("totalPages", all.getTotalPages());
+
+		map.put("content", all.getContent());
+		map.put("totalPages", all.getTotalPages());
 		return map;
+	}
+
+	@Override
+	public List<Product> getAllProducts(Principal principal) {
+		String username = principal.getName();
+		Customer customer = customerRepository.findByName(username);
+		return productRepository.findAllByCustomer(customer);
 	}
 
 	@Override

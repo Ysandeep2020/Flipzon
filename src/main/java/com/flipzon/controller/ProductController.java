@@ -1,5 +1,6 @@
 package com.flipzon.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,9 @@ import com.flipzon.repository.ProductTypeRepository;
 import com.flipzon.service.ProductService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping(UrlMappings.PRODUCTS)
 public class ProductController {
@@ -39,17 +42,29 @@ public class ProductController {
 	@Autowired
 	private ProductTypeRepository productTypeRepository;
 
-	@PostMapping
+	@PostMapping("/add")
 	public ResponseEntity<Product> addProduct(@Valid @RequestBody ProductRequest product) {
 		Product productOut = productService.addProduct(product);
 		return new ResponseEntity<Product>(productOut, HttpStatus.CREATED); // 201 created
 	}
 
 	@GetMapping("/page/{page}/sortBy/{prop}")
+//	@GetMapping("/all")
 	public ResponseEntity<Object> getAllProducts(@PathVariable int page, @PathVariable String prop,
-			@RequestParam(defaultValue = "asc") String order) {
-		Map<String, Object> map = productService.getAllProducts(page, prop, order);
+			@RequestParam(defaultValue = "asc") String order, Principal principal) {
+		 Map<String, Object> map = productService.getAllProducts(page, prop, order,
+		 principal);
+
 		return new ResponseEntity<Object>(map, HttpStatus.OK);// 200 OK
+	}
+
+	@GetMapping("/all")
+//	@GetMapping("/all")
+	public ResponseEntity<Object> getAllProductsByUsername(Principal principal) {
+		// Map<String, Object> map = productService.getAllProducts(page, prop, order,
+		// principal);
+		List<Product> all = productService.getAllProducts(principal);
+		return new ResponseEntity<Object>(all, HttpStatus.OK);// 200 OK
 	}
 
 	@GetMapping(UrlMappings.PK)
@@ -82,5 +97,4 @@ public class ProductController {
 		return new ResponseEntity<Object>(all, HttpStatus.OK);
 	}
 
-	
 }

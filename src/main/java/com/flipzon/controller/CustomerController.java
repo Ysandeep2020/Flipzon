@@ -31,7 +31,7 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 
-	@PostMapping
+	@PostMapping("/new")
 	public ResponseEntity<String> addCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
 		String output = customerService.addCustomer(customerRequest);
 		return new ResponseEntity<String>(output, HttpStatus.CREATED);

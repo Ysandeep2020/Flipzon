@@ -50,6 +50,7 @@ public class Product {
 	@CreationTimestamp
 	@Column(name = "created_at")
 	private Date createdAt;
+	
 	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "updated_at")

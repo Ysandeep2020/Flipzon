@@ -30,6 +30,8 @@ public class Customer {
 	private String email;
 	private String mobile;
 	private String address;
+	private String password;
+	private String roles;
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	private List<Product> products;

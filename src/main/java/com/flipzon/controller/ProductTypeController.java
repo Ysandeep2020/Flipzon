@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,7 +25,9 @@ import com.flipzon.model.ProductType;
 import com.flipzon.service.ProductTypeService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping(UrlMappings.PRODUCT_TYPES)
 public class ProductTypeController {
@@ -32,17 +36,24 @@ public class ProductTypeController {
 
 	@PostMapping
 	public ResponseEntity<ProductType> addProductType(@Valid @RequestBody ProductTypeRequest productType) {
+		log.info("ProductTypeController Request {}", productType);
 		ProductType productOut = productTypeService.addProductType(productType);
+		log.info("ProductTypeController Response {}", productType);
 		return new ResponseEntity<ProductType>(productOut, HttpStatus.CREATED); // 201 created
 	}
 
 	@GetMapping
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	//@Secured({ "ROLE_ADMIN" })
 	public ResponseEntity<List<ProductType>> getAllProductsTypes() {
 		List<ProductType> allProductTypes = productTypeService.getAllProductTypes();
 		return new ResponseEntity<List<ProductType>>(allProductTypes, HttpStatus.OK);// 200 OK
 	}
 
 	@GetMapping(UrlMappings.PK)
+	//@PreAuthorize("hasAuthority('ROLE_USER')")
+	@Secured({"ROLE_USER" })
 	public ResponseEntity<ProductType> getProductTypeByPk(@PathVariable long pk) {
 		ProductType productType = productTypeService.findByPk(pk);
 		return new ResponseEntity<ProductType>(productType, HttpStatus.OK);

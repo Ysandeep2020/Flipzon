@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flipzon.advice.CustomerNotFoundException;
@@ -27,6 +28,8 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private ProductRepository productRepository;
 	Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Override
 	public String addCustomer(CustomerRequest customerRequest) {
@@ -35,7 +38,9 @@ public class CustomerServiceImpl implements CustomerService {
 //		customer.setEmail(customerRequest.getEmail());
 //		customer.setMobile(customerRequest.getMobile());
 //		customer.setName(customerRequest.getName());
+
 		BeanUtils.copyProperties(customerRequest, customer);
+		customer.setPassword(encoder.encode(customerRequest.getPassword()));
 		customerRepository.save(customer);
 		return customer.getName() + " Added!";
 	}

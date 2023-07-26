@@ -18,4 +18,8 @@ public class CustomerRequest {
 	private String mobile;
 	@NotBlank(message = "address is mandatory")
 	private String address;
+	@NotBlank(message = "password is mandatory")
+	private String password;
+	@NotBlank(message = "roles is mandatory")
+	private String roles;
 }
